@@ -51,7 +51,7 @@ class ShiftListApi(generics.GenericAPIView):
         if(user.is_agent):
             agent = AgentProfile.objects.get(agent=user)
             shifts = ShiftName.objects.filter(month=month).filter(agent=agent)
-            return shifts
+            return Response(ShiftSerializer(shifts, many=True, context={"employee_id":False}).data, status=200)
         else:
             home = HomeProfile.objects.get(home=user)
             shifts = ShiftName.objects.filter(month=month).filter(home=home)
