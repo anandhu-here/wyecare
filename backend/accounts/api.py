@@ -54,7 +54,7 @@ class RegisterAPI(generics.GenericAPIView):
     if type == 'CARER':
       print("poooor", user)
       key = data["key"]
-      agent = AgentProfile.objects.filer(key=key).first()
+      agent = AgentProfile.objects.filter(key=key).first()
       carer = Profile.objects.get(user = user)
       carer.first_name = data['first_name']
       carer.last_name = data['last_name']
