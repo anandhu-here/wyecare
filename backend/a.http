@@ -1,0 +1,10 @@
+POST http://localhost:8000/api/signup
+Content-Type: application/json
+
+{
+    "email":"nith123@gmail.com",
+    "password":"blackbird@5",
+    "first_name":"Anandhu Satheesh",
+    "last_name":"John",
+    "type":"CARER"
+}
