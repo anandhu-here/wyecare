@@ -43,11 +43,11 @@ class PublishBulk(generics.GenericAPIView):
 
         return Response(serializer.data)
 
-class ShiftListApi(generics.ListAPIView):
-    serializer_class = ShiftSerializer
-    def get_queryset(self):
-        month = self.request.GET['month']
-        user = self.request.user
+class ShiftListApi(generics.GenericAPIView):
+    # serializer_class = ShiftSerializer
+    def get(self, request, *args, **kwargs):
+        month = request.GET['month']
+        user = request.user
         if(user.is_agent):
             agent = AgentProfile.objects.get(agent=user)
             shifts = ShiftName.objects.filter(month=month).filter(agent=agent)
@@ -55,7 +55,7 @@ class ShiftListApi(generics.ListAPIView):
         else:
             home = HomeProfile.objects.get(home=user)
             shifts = ShiftName.objects.filter(month=month).filter(home=home)
-            return shifts   
+            return ShiftSerializer(shifts, many=True, context={"employee_id":False}).data   
 
 class AssignedList(generics.ListAPIView):
     serializer_class = ShiftAssignedSerializer
