@@ -80,7 +80,7 @@ class ShiftAssignedSerializer(serializers.ModelSerializer):
 
 class ShiftAssignmentSerializer(serializers.ModelSerializer):
     employee = serializers.SerializerMethodField(read_only=True)
-    shiftname = ShiftSerializer(read_only=True)
+    shiftname = ShiftSerializer(read_only=True, context={"employee_id":False})
     class Meta:
         model = ShiftAssignment
         fields = ('id', 'type', 'employee', 'shiftname')
