@@ -87,7 +87,7 @@ class ShiftAssignmentSerializer(serializers.ModelSerializer):
 
     def get_shiftname(self, obj):
         shift = ShiftName.objects.get(id=obj.shiftname.id)
-        return ShiftSerializer(shift, context={"employee_id":False})
+        return ShiftSerializer(shift, context={"employee_id":False}).data
     def get_employee(self, ins):
         id = ins.employee.id
         pro = Profile.objects.get(id = id)
