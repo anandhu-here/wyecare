@@ -59,10 +59,10 @@ class UserManager(BaseUserManager):
         )
         return user
 
-    def create_superuser(self, email,push_token, password=None):
+    def create_superuser(self, email,password=None, push_token=None):
         user = self.create_user(
             email,
-            push_token=None,
+            push_token=push_token,
             password=password,
             is_staff=True,
             is_admin=True,
