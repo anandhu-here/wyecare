@@ -80,10 +80,14 @@ class ShiftAssignedSerializer(serializers.ModelSerializer):
 
 class ShiftAssignmentSerializer(serializers.ModelSerializer):
     employee = serializers.SerializerMethodField(read_only=True)
-    shiftname = ShiftSerializer(read_only=True, context={"employee_id":False})
+    shiftname =serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = ShiftAssignment
         fields = ('id', 'type', 'employee', 'shiftname')
+
+    def get_shiftname(self, obj):
+        shift = ShiftName.objects.get(id=obj.shiftname.id)
+        return ShiftSerializer(shift, context={"employee_id":False})
     def get_employee(self, ins):
         id = ins.employee.id
         pro = Profile.objects.get(id = id)
