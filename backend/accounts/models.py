@@ -214,6 +214,10 @@ class Docs(models.Model):
     file = models.FileField(upload_to=fileUPload, blank=True, null = True)
     Timestamp = models.DateTimeField(auto_now=True)
 
+class Documents(models.Model):
+    name = models.CharField(max_length=200, blank=True, null=True)
+    
+
 class FollowerRelation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
