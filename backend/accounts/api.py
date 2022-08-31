@@ -162,15 +162,13 @@ def invite_homes(request, *args, **kwargs):
     )
     return Response({"message":"Success"}, status=201)
 
-@api_view(["POST"])
-def upload_docs(request, *args, **kwargs):
-  if(request.method == "POST"):
-    print(request.data, "anandhu")
-    data = request.data
-    profile = Profile.objects.get(id = data["id"])
-    doc = Docs.objects.create(profile=profile, name = data["filename"], file=data["file"] )
-    serializer = DocsSerializer(doc)
-    return Response(serializer.data)
+@api_view(["GET"])
+def getDocs(request, *args, **kwargs):
+  if(request.method == "GET"):
+    id = request.data["profile_id"]
+    docs = Docs.objects.filter(profile__id=id)
+    serializer = DocsSerializer(docs, many=True)
+    return Response(serializer.data, status=200)
 
 
 class DocUploadView(views.APIView):
