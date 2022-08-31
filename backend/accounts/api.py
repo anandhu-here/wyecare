@@ -165,7 +165,7 @@ def invite_homes(request, *args, **kwargs):
 @api_view(["GET"])
 def getDocs(request, *args, **kwargs):
   if(request.method == "GET"):
-    id = request.data["profile_id"]
+    id = request.GET["profile_id"]
     docs = Docs.objects.filter(profile__id=id)
     serializer = DocsSerializer(docs, many=True)
     return Response(serializer.data, status=200)
