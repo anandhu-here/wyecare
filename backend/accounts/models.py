@@ -210,7 +210,7 @@ class Trainings(models.Model):
 
 class Docs(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    name = models.CharField(blank=True, null=True, max_length=200)
+    key = models.IntegerField(blank=True, null=True)
     file = models.FileField(upload_to=fileUPload, blank=True, null = True)
     Timestamp = models.DateTimeField(auto_now=True)
 

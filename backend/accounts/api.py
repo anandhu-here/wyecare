@@ -177,12 +177,23 @@ class DocUploadView(views.APIView):
   parser_class = (MultiPartParser, FormParser)
   def post(self, request, *args, **kwargs):
     print(request.data, "data", request.FILES)
-    serializer = DocsSerializer(data=request.data["file"])
-    if serializer.is_valid():
-      serializer.save()
+    data = request.data
+    file = data["file"]
+    doc_key=data["key"]
+    id = data["profile_id"]
+    profile = Profile.objects.filter(id=id).first()
+    if profile:
+      doc = Docs.objects.create(profile=profile, key=doc_key, file=file)
+      serializer = DocsSerializer(doc)
       return Response(serializer.data, status=201)
     else:
-      return Response(serializer.errors, status=400)
+      return Response({"message":"Error"}, status=400)
+    # serializer = DocsSerializer(data=request.data["file"])
+    # if serializer.is_valid():
+    #   serializer.save()
+    #   return Response(serializer.data, status=201)
+    # else:
+    #   return Response(serializer.errors, status=400)
 
 @api_view(["POST"])
 def upload_trainings(request, *args, **kwargs):
