@@ -216,7 +216,9 @@ class Docs(models.Model):
 
 class Documents(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True)
-    
+
+    def __str__(self):
+        return self.name
 
 class FollowerRelation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
