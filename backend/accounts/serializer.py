@@ -5,10 +5,16 @@ from django.contrib.auth import authenticate
 from .models import AgentProfile, HomeProfile, Profile, TrainingCertificates, User, Docs
 from shift.models import ShiftAssignment
 class AgentProfileSerializer(serializers.ModelSerializer):
+  push_token = serializers.SerializerMethodField()
   class Meta:
     model = AgentProfile
-    fields = "__all__"
+    fields = ('agent', 'phone', 'key', 'name', 'postcode', 'address', 'push_token')
 
+  def get_push_token(self, obj):
+    if obj.agent.push_token:
+      return obj.agent.push_token
+    else:
+      return False
 class HomeProfileSerializer(serializers.ModelSerializer):
   agent = AgentProfileSerializer(read_only=True, many=True)
   class Meta:
