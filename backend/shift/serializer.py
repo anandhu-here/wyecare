@@ -19,15 +19,17 @@ class ShiftSerializer(serializers.ModelSerializer):
     def get_home_id(self, instance):
         return instance.get_home_id
     def get_covered(self, obj):
-        if self.context:
-            id = self.context["employee_id"]
-            t_sheet = Timesheets.objects.filter(profile__id=id).filter(shiftname=obj).first()
-            if t_sheet:
-                return True
-            else:
-                return False 
-        else:
-            return False
+        for ass in obj.shiftassignment_set.all():
+            return ass.covered
+            
+        #     id = self.context["employee_id"]
+        #     t_sheet = Timesheets.objects.filter(profile__id=id).filter(shiftname=obj).first()
+        #     if t_sheet:
+        #         return True
+        #     else:
+        #         return False 
+        # else:
+        #     return False
     def get_assigned(self, instance):
         data = ShiftAssSerializer(ShiftAssignment.objects.filter(shiftname = instance), many=True, context={"shift_id":instance.id}).data
         return data

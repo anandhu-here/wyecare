@@ -65,6 +65,7 @@ class ShiftAssignment(models.Model):
     employee = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="profiles", blank=True, null=True) 
     selected = models.CharField(choices=(('LATE', 'LATE'), ('LONGDAY', 'LONGDAY'), ('NIGHT', 'NIGHT'),('EARLY', 'EARLY')), max_length=100, blank=True, null=True)
     color = models.CharField(max_length=100, blank=True, null=True)
+    covered = models.BooleanField(default=False)
     def __str__(self):
         return str(self.employee.first_name) 
 
