@@ -60,7 +60,6 @@ class ShiftListApi(generics.GenericAPIView):
 class AssignedList(generics.ListAPIView):
     serializer_class = ShiftAssignedSerializer
     def get_queryset(self):
-        print("cdscdsjcjds chjsd chj")
         id = self.request.GET['employee_id']
         qs = ShiftAssignment.objects.filter(employee__id=id)
         print(qs, "employ")

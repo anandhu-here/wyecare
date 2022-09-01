@@ -21,7 +21,7 @@ class ShiftSerializer(serializers.ModelSerializer):
     def get_covered(self, obj):
         if self.context:
             id = self.context["employee_id"]
-            t_sheet = Timesheets.objects.filter(profile__id=id).first()
+            t_sheet = Timesheets.objects.filter(profile__id=id).filter(shiftname=obj).first()
             if t_sheet:
                 return True
             else:
