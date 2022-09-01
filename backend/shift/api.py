@@ -110,20 +110,20 @@ class AssignShift(generics.GenericAPIView):
 def WriteTimesheet(request, *args, **kwargs):
   if request.method == "POST":
     data = request.data
-
     profile = Profile.objects.get(id=data['profile_id'])
     home = HomeProfile.objects.get(id=data['home_id'])
     shiftname = ShiftName.objects.get(id=data['shift_id'])
+    shift_ass = ShiftAssignment.objects.filter(shiftname=shiftname).filter(employee=profile).first()
     img_data = data["image"]
     format, imgstr = img_data.split(';base64,')
-    print(format, "format")
     ext = format.split('/')[-1]
     imgdata = ContentFile(base64.b64decode(imgstr))
     filename = "signature." + ext
     sheet = Timesheets(profile=profile, type=data["type"], home=home,shiftname=shiftname, auth_name=data["auth_name"], auth_position=data["auth_position"])
     sheet.sign.save(filename, imgdata, save=True)
+    shift_ass.covered = True
+    shift_ass.save()
     sheet.save()
-    ass = ShiftAssignment.objects
     serializer = TimesheetSerializer(sheet)
     return Response(serializer.data, status=200)
 
