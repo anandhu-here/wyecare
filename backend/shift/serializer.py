@@ -102,7 +102,7 @@ class NotificationSerializer(serializers.ModelSerializer):
     shift_ass_id = serializers.SerializerMethodField()
     class Meta:
         model = Notifications
-        fields = ('id', 'home', "shift", "dealt", "type", "date_added", "employee", "shift_ass_id")
+        fields = ('id', 'home', "shift","body", "dealt", "type", "date_added", "employee", "shift_ass_id")
     def get_home(self, obj):
         return obj.get_home_data
     def get_employee(self, obj):
