@@ -114,7 +114,7 @@ def CancelRequest(request, *args, **kwargs):
         shift_ass_id = data["shift_ass_id"]
         shift = ShiftName.objects.get(id=shift_id)
         noti = Notifications.objects.create(shift=shift, type=1, body=data["body"],dealt=False)
-        return Response(NotificationSerializer(noti, context={employee_id:employee_id, shift_ass_id:shift_ass_id}).data, status=200)
+        return Response(NotificationSerializer(noti, context={"employee_id":employee_id, "shift_ass_id":shift_ass_id}).data, status=200)
 
 @api_view(["POST"])
 def WriteTimesheet(request, *args, **kwargs):

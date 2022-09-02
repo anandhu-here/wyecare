@@ -106,6 +106,7 @@ class NotificationSerializer(serializers.ModelSerializer):
     def get_home(self, obj):
         return obj.get_home_data
     def get_employee(self, obj):
+        print(self.context, "context")
         if self.context:
             id = self.context["employee_id"]
             return Profile.objects.get(id = id)
