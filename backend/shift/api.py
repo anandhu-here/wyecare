@@ -69,7 +69,7 @@ class NotificationListApi(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         data = request.GET
         qs = Notifications.objects.all().order_by('-date_added')
-        return Response(NotificationSerializer(qs, many=True, context={"employee_id":False, "shift_ass_id":False}))
+        return Response(NotificationSerializer(qs, many=True, context={"employee_id":False, "shift_ass_id":False}).data, status=200)
         
 
 class TimesheetList(generics.ListAPIView):
