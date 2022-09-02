@@ -88,7 +88,7 @@ class Timesheets(models.Model):
 
 class Notifications(models.Model):
     shift = models.ForeignKey(ShiftName, on_delete=models.CASCADE)
-    type = models.CharField(choices=((0, "SHIFT_ADD"), (1, "CANCEL_SHIFT"), (2, "SHIFT_ASSIGN")))
+    type = models.CharField(choices=((0, "SHIFT_ADD"), (1, "CANCEL_SHIFT"), (2, "SHIFT_ASSIGN")), max_length=100)
     body = models.TextField(blank=True, null=True)
     dealt = models.BooleanField(default=False)
     date_added = models.DateTimeField(auto_now=True)
