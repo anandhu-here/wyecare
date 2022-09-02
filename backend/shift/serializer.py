@@ -111,13 +111,13 @@ class NotificationSerializer(serializers.ModelSerializer):
             id = self.context["employee_id"]
             return id
         else: 
-            return obj.employee
+            return obj.employee.id
     def get_shift_ass_id(self, obj):
         if self.context["employee_id"]:
             id = self.context["shift_ass_id"]
             return id
         else:
-            return obj.shift_ass_id
+            return obj.shift_ass.id
 class ShiftAssignSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShiftAssignment
