@@ -105,6 +105,16 @@ class AssignShift(generics.GenericAPIView):
         serializer = self.get_serializer(assigned_final, context={"shift_id":assigned_shift[0]['shift_id']}, many=True)
 
         return Response(serializer.data)
+@api_view(["POST"])
+def CancelRequest(request, *args, **kwargs):
+    if request.method == "POST":
+        data = request.data
+        shift_id = data["shift_id"]
+        employee_id = data["employee_id"]
+        shift_ass_id = data["shift_ass_id"]
+        shift = ShiftName.objects.get(id=shift_id)
+        noti = Notifications.objects.create(shift=shift, type=1, body=data["body"],dealt=False)
+        return Response(NotificationSerializer(noti, context={employee_id:employee_id, shift_ass_id:shift_ass_id}).data, status=200)
 
 @api_view(["POST"])
 def WriteTimesheet(request, *args, **kwargs):

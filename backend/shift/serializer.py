@@ -55,6 +55,7 @@ class TimesheetSerializer(serializers.ModelSerializer):
 
     
 
+
 class ShiftAssSerializer(serializers.ModelSerializer):
     employee = serializers.SerializerMethodField(read_only=True)
     class Meta:
@@ -97,13 +98,24 @@ class ShiftAssignmentSerializer(serializers.ModelSerializer):
 
 class NotificationSerializer(serializers.ModelSerializer):
     home = serializers.SerializerMethodField()
+    employee = serializers.SerializerMethodField()
+    shift_ass_id = serializers.SerializerMethodField()
     class Meta:
         model = Notifications
-        fields = ('id', 'home',)
+        fields = ('id', 'home', "shift", "dealt", "type", "date_added", "employee", "shift_ass_id")
     def get_home(self, obj):
         return obj.get_home_data
-    
-
+    def get_employee(self, obj):
+        if self.context:
+            id = self.context["employee_id"]
+            return Profile.objects.get(id = id)
+        else: return False
+    def get_shift_ass_id(self, obj):
+        if self.context:
+            id = self.context["shift_ass_id"]
+            return ShiftAssignment.objects.get(id = id)
+        else:
+            return False
 class ShiftAssignSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShiftAssignment

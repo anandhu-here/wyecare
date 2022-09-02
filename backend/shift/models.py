@@ -88,6 +88,9 @@ class Timesheets(models.Model):
 
 class Notifications(models.Model):
     shift = models.ForeignKey(ShiftName, on_delete=models.CASCADE)
+    type = models.CharField(choices=((0, "SHIFT_ADD"), (1, "CANCEL_SHIFT"), (2, "SHIFT_ASSIGN")))
+    body = models.TextField(blank=True, null=True)
+    dealt = models.BooleanField(default=False)
     date_added = models.DateTimeField(auto_now=True)
     @property
     def get_home_data(self):
@@ -95,8 +98,9 @@ class Notifications(models.Model):
             "home":self.shift.home.name,
             "id":self.shift.home.home.id
         }
+    
     def __str__(self):
-        return self.shift.home.name
+        return str(self.id)
     
 def notify_shift_added(home, sender):
     # shiftname = ShiftName.objects.get(home=home)
@@ -118,6 +122,7 @@ def notify_shift_added(home, sender):
 #                 'body':f'Shift booked in {ass.shiftname.home.name}'
 #             }
 #             rq.post('https://exp.host/--/api/v2/push/send', json = message)
+
 
 def shift_added_signal(sender, instance, created, *args, **kwargs):
     if created:
