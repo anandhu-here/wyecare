@@ -65,12 +65,11 @@ class AssignedList(generics.ListAPIView):
         print(qs, "employ")
         return qs
 
-class NotificationListApi(generics.ListAPIView):
-    serializer_class = NotificationSerializer
+class NotificationListApi(generics.GenericAPIView):
     def get_queryset(self):
         data = self.request.GET
         qs = Notifications.objects.all().order_by('-date_added')
-        return qs
+        return Response(NotificationSerializer(qs, many=True, context={"employee_id":False, "shift_ass_id":False}))
 
 class TimesheetList(generics.ListAPIView):
     serializer_class = TimesheetSerializer

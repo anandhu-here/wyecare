@@ -107,16 +107,17 @@ class NotificationSerializer(serializers.ModelSerializer):
         return obj.get_home_data
     def get_employee(self, obj):
         print(self.context, "context")
-        if self.context:
+        if self.context["employee_id"]:
             id = self.context["employee_id"]
             return id
-        else: return False
+        else: 
+            return obj.employee
     def get_shift_ass_id(self, obj):
-        if self.context:
+        if self.context["employee_id"]:
             id = self.context["shift_ass_id"]
             return id
         else:
-            return False
+            return obj.shift_ass_id
 class ShiftAssignSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShiftAssignment
