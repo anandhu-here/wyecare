@@ -114,7 +114,7 @@ class NotificationSerializer(serializers.ModelSerializer):
             return obj.employee.id
     def get_shift(self, obj):
         shift = ShiftName.objects.get(id=obj.shift.id)
-        return ShiftSerializer(shift, context={"employee_id":False})
+        return ShiftSerializer(shift, context={"employee_id":False}).data
 
     def get_shift_ass_id(self, obj):
         if self.context["employee_id"]:
