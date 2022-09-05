@@ -62,8 +62,11 @@ class AssignedList(generics.ListAPIView):
     def get_queryset(self):
         id = self.request.GET['employee_id']
         qs = ShiftAssignment.objects.filter(employee__id=id)
-        print(qs, "employ")
         return qs
+
+class GetSpecificAss(generics.GenericAPIView):
+    def get(self, request, *args, **kwargs):
+        pass
 
 class NotificationListApi(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):

@@ -100,18 +100,22 @@ class NotificationSerializer(serializers.ModelSerializer):
     home = serializers.SerializerMethodField()
     employee = serializers.SerializerMethodField()
     shift_ass_id = serializers.SerializerMethodField()
+    shift = serializers.SerializerMethodField()
     class Meta:
         model = Notifications
         fields = ('id', 'home', "shift","body", "dealt", "type", "date_added", "employee", "shift_ass_id")
     def get_home(self, obj):
         return obj.get_home_data
     def get_employee(self, obj):
-        print(self.context, "context")
         if self.context["employee_id"]:
             id = self.context["employee_id"]
             return id
         else: 
             return obj.employee.id
+    def get_shift(self, obj):
+        shift = ShiftName.objects.get(id=obj.shift.id)
+        return ShiftSerializer(shift, context={"employee_id":False})
+
     def get_shift_ass_id(self, obj):
         if self.context["employee_id"]:
             id = self.context["shift_ass_id"]
