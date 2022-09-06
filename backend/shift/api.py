@@ -119,7 +119,7 @@ def replaceAssigned(request, *args, **kwargs):
         re_id = request.data["re_id"]
         ass = ShiftAssignment.objects.get(id=re_id)
         ass.delete()
-        return Response({"message":"Deleted"}, status=204)
+        return Response({"message":"Deleted"}, status=200)
 
 @api_view(["POST"])
 def CancelRequest(request, *args, **kwargs):
