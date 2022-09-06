@@ -36,7 +36,6 @@ class ProfileSerializer(serializers.ModelSerializer):
   position = serializers.SerializerMethodField()
   trainings = serializers.SerializerMethodField()
   ass_data = serializers.SerializerMethodField()
-  color = serializers.SerializerMethodField()
   push_token = serializers.SerializerMethodField()
   agent = serializers.SerializerMethodField()
   class Meta:
