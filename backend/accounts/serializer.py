@@ -35,13 +35,13 @@ class DocsSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
   position = serializers.SerializerMethodField()
   trainings = serializers.SerializerMethodField()
-  selected = serializers.SerializerMethodField()
+  ass_data = serializers.SerializerMethodField()
   color = serializers.SerializerMethodField()
   push_token = serializers.SerializerMethodField()
   agent = serializers.SerializerMethodField()
   class Meta:
     model = Profile 
-    fields = ['id', 'first_name', 'last_name', 'user', 'position', "trainings", "selected", "color", "push_token", "agent"]
+    fields = ['id', 'first_name', 'last_name', 'user', 'position', "trainings", "ass_data", "push_token", "agent"]
   def get_position(self, obj):
     return obj.get_pos
   def get_push_token(self, obj):
@@ -51,29 +51,29 @@ class ProfileSerializer(serializers.ModelSerializer):
     if agent:
       return AgentProfileSerializer(agent).data
     else: return False
-  def get_selected(self, obj):
+  def get_ass_data(self, obj):
     context = self.context["shift_id"]
     
     if context:
       id = int(self.context["shift_id"])
       shiftAss = ShiftAssignment.objects.filter(shiftname_id=id).filter(employee_id=obj.id).first()
       if shiftAss and shiftAss.employee.id == obj.id:
-        return shiftAss.selected 
+        return {"selected":shiftAss.selected, "color":shiftAss.color}
       else:
-        return False
+        return {"selected":False, "color":False}
     else:
       pass
-  def get_color(self, obj):
-    context = self.context["shift_id"]
-    if context:
-      id = int(self.context["shift_id"])
-      shiftAss = ShiftAssignment.objects.filter(shiftname_id=id).filter(employee_id=obj.id).first()
-      if shiftAss and shiftAss.employee.id == obj.id:
-        return shiftAss.color 
-      else:
-        return False
-    else:
-      pass
+  # def get_color(self, obj):
+  #   context = self.context["shift_id"]
+  #   if context:
+  #     id = int(self.context["shift_id"])
+  #     shiftAss = ShiftAssignment.objects.filter(shiftname_id=id).filter(employee_id=obj.id).first()
+  #     if shiftAss and shiftAss.employee.id == obj.id:
+  #       return shiftAss.color 
+  #     else:
+  #       return False
+  #   else:
+  #     pass
   def get_trainings(self, obj):
     return TrainingSerializer(TrainingCertificates.objects.filter(profile=obj), many=True).data
 
