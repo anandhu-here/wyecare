@@ -82,6 +82,9 @@ class TimesheetList(generics.ListAPIView):
         qs = Timesheets.objects.filter(profile__id=id)
         return qs
 
+
+
+
 class AssignShift(generics.GenericAPIView):
     serializer_class = ShiftAssignmentSerializer
     # def get_serializer_context(self):
@@ -93,6 +96,7 @@ class AssignShift(generics.GenericAPIView):
         # user_id = request.data['user_id']
         # home_id = request.data['home_id']
         assigned_shift = request.data['assigned']
+        print(assigned_shift, "assigned")
         qs_ass = ShiftAssignment.objects.filter(shiftname_id=assigned_shift[0]["shift_id"])
         final = []
         for shift in assigned_shift:
@@ -108,6 +112,19 @@ class AssignShift(generics.GenericAPIView):
         serializer = self.get_serializer(assigned_final, context={"shift_id":assigned_shift[0]['shift_id']}, many=True)
 
         return Response(serializer.data)
+
+@api_view(["POST"])
+def replaceAssigned(request, *args, **kwargs):
+    if request.method == "POST":
+        re_id = request.data["re_id"]
+        type = request.data["type"]
+        employee = Profile.objects.filter(id=request.data["employee_id"]).first()
+        ass = ShiftAssignment.objects.get(id=re_id)
+        ass.employee = employee
+        ass.type = type
+        ass.save()
+        return Response(ShiftAssignmentSerializer(ass).data, status=201)
+
 @api_view(["POST"])
 def CancelRequest(request, *args, **kwargs):
     if request.method == "POST":
