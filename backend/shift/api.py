@@ -117,13 +117,9 @@ class AssignShift(generics.GenericAPIView):
 def replaceAssigned(request, *args, **kwargs):
     if request.method == "POST":
         re_id = request.data["re_id"]
-        type = request.data["type"]
-        employee = Profile.objects.filter(id=request.data["employee_id"]).first()
         ass = ShiftAssignment.objects.get(id=re_id)
-        ass.employee = employee
-        ass.type = type
-        ass.save()
-        return Response(ShiftAssignmentSerializer(ass).data, status=201)
+        ass.delete()
+        return Response({"message":"Deleted"}, status=204)
 
 @api_view(["POST"])
 def CancelRequest(request, *args, **kwargs):
