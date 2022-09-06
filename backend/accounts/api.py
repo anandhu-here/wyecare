@@ -137,8 +137,8 @@ def UserListView(request, *args, **kwargs):
   agent = AgentProfile.objects.get(agent=user)
   if user.is_agent or user.is_staff:
     if(type == 'HOME'):
-      qs = HomeProfile.objects.all()
-      serializer = HomeProfileSerializer(qs, many=True) 
+      agent = AgentProfile.objects.get(agent=user)
+      serializer = HomeProfileSerializer(agent.homeprofile_set.all(), many=True)
       return Response(serializer.data, status=200)
     elif type == 'CARER':
       qs = Profile.objects.filter(user__carer = True).filter(key=agent.key)
