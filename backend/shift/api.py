@@ -100,7 +100,7 @@ class AssignShift(generics.GenericAPIView):
         qs_ass = ShiftAssignment.objects.filter(shiftname_id=assigned_shift[0]["shift_id"])
         final = []
         for shift in assigned_shift:
-            ass = ShiftAssignment(type=shift['selected'], shiftname = ShiftName.objects.get(id = shift['shift_id']), selected = shift["selected"], color=shift["color"], employee = Profile.objects.get(id=shift['id']))
+            ass = ShiftAssignment(type=shift["ass_data"]['selected'], shiftname = ShiftName.objects.get(id = shift['shift_id']), selected = shift["ass_data"]["selected"], color=shift["ass_data"]["color"], employee = Profile.objects.get(id=shift['id']))
             if len(qs_ass) > 0:
                 for ass2 in qs_ass:
                     if ass.employee.id != ass2.employee.id and ass.shiftname.id == ass2.shiftname.id:
