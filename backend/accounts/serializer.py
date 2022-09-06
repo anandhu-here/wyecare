@@ -59,7 +59,7 @@ class ProfileSerializer(serializers.ModelSerializer):
       if shiftAss and shiftAss.employee.id == obj.id:
         return {"selected":shiftAss.selected, "color":shiftAss.color, "ass_id":shiftAss.id}
       else:
-        return {"selected":False, "color":False, "ass_id":shiftAss.id}
+        return {"selected":False, "color":False, "ass_id":False}
     else:
       pass
   # def get_color(self, obj):
