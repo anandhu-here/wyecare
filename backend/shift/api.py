@@ -62,6 +62,7 @@ class AssignedList(generics.ListAPIView):
     def get_queryset(self):
         id = self.request.GET['employee_id']
         qs = ShiftAssignment.objects.filter(employee__id=id)
+        print(qs, "qs")
         return qs
 
 class GetSpecificAss(generics.GenericAPIView):
