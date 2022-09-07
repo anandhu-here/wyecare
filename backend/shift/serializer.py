@@ -73,7 +73,7 @@ class ShiftAssignedSerializer(serializers.ModelSerializer):
         model = ShiftAssignment
         fields = ('id', 'type', 'employee', 'shiftname', 'shiftdetail')
     def get_shiftdetail(self, ins):
-        return {"day":ins.shiftname.day, "month":ins.shiftname.month,"month":ins.shiftname.month, "home":ins.shiftname.home.name}
+        return {"day":ins.shiftname.day, "month":ins.shiftname.month,"month":ins.shiftname.month, "home":ins.shiftname.home.name, "home_id":ins.shiftname.home.id}
     def get_employee(self, ins):
         
         id = ins.employee.id
