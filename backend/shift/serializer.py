@@ -68,12 +68,12 @@ class ShiftAssSerializer(serializers.ModelSerializer):
 
 class ShiftAssignedSerializer(serializers.ModelSerializer):
     employee = serializers.SerializerMethodField(read_only=True)
-    # shiftname = serializers.SerializerMethodField(read_only=True)
+    shiftdetail = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = ShiftAssignment
         fields = ('id', 'type', 'employee', 'shiftname')
-    # def get_shiftname(self, ins):
-    #     return ShiftSerializer(ins.shiftname, context={"employee_id":ins.employee.id}).data
+    def get_shiftdetail(self, ins):
+        return {"day":ins.shiftname.day, "month":ins.shiftname.month,"month":ins.shiftname.month}
     def get_employee(self, ins):
         
         id = ins.employee.id
