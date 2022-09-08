@@ -35,6 +35,7 @@ class RegisterAPI(generics.GenericAPIView):
         if agent:
           profile = HomeProfile.objects.get(home=user)
           profile.name = data['home_name']
+          profile.address = data["address"]
           profile.agent.add(agent)
           
           profile.save()
