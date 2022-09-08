@@ -127,6 +127,7 @@ class LoginSerializer(serializers.Serializer):
   def validate(self, data):
     try:
       user = User.objects.get(email=data['email'])
+      print(user, "user")
     except User.DoesNotExist:
       raise serializers.ValidationError("Incorrect Credentials")
     user = authenticate(email=user.email, password=data['password'])
