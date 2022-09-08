@@ -27,7 +27,8 @@ class RegisterAPI(generics.GenericAPIView):
       if key:
         serializer = self.get_serializer(data={
           "email":email,
-          "password":password
+          "password":password,
+          "push_token":push_token
         }, context={'type':data['type']})
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
