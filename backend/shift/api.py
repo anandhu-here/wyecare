@@ -54,6 +54,7 @@ class ShiftListApi(generics.GenericAPIView):
             return Response(ShiftSerializer(shifts, many=True, context={"employee_id":False}).data, status=200)
         elif user.is_home:
             home = HomeProfile.objects.get(home=user)
+            
             shifts = ShiftName.objects.filter(month=month).filter(home=home)
             print(shifts, "shifts")
             return Response(ShiftSerializer(shifts, many=True, context={"employee_id":False}).data, status=200)   
