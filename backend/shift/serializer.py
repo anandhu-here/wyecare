@@ -11,13 +11,17 @@ class ShiftSerializer(serializers.ModelSerializer):
     assigned = serializers.SerializerMethodField()
     home_id = serializers.SerializerMethodField()
     covered = serializers.SerializerMethodField()
+    agency_token = serializers.SerializerMethodField()
+
     class Meta:
         model = ShiftName
-        fields = ('id', 'longday', 'night', 'late', 'early', 'home', 'day', 'month', 'year', 'home_id', "assigned","covered" )
+        fields = ('id', 'longday', 'night', 'late', 'early', 'home', 'day', 'month', 'year', 'home_id', "assigned","covered", "agency_token")
     def get_home(self, instance):
         return instance.get_home_data
     def get_home_id(self, instance):
         return instance.get_home_id
+    def get_agency_token(self, obj):
+        return obj.agent.agent.push_token
     def get_covered(self, obj):
         for ass in obj.shiftassignment_set.all():
             return ass.covered
