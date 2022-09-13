@@ -37,7 +37,7 @@ class PublishBulk(generics.GenericAPIView):
         home = HomeProfile.objects.filter(id = home_id)[0]
         agent = AgentProfile.objects.get(id = agent_id)
         data = request.data['shift']
-        shifts = [ShiftName(home=home,agent=agent, day = shift['day'], month = shift['month'], longday = shift['longday'], night=shift['night'], early=shift['early'], late=shift['late'], year = shift['year']) for shift in data]
+        shifts = [ShiftName(home=home,agent=AgentProfile.objects.filter(id=shift['agent_id']), day = shift['day'], month = shift['month'], longday = shift['longday'], night=shift['night'], early=shift['early'], late=shift['late'], year = shift['year']) for shift in data]
         shifts_final = ShiftName.objects.bulk_create(shifts)
         serializer = self.get_serializer(shifts_final, many=True)
 
