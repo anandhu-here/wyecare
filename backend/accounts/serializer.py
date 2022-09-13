@@ -8,7 +8,7 @@ class AgentProfileSerializer(serializers.ModelSerializer):
   push_token = serializers.SerializerMethodField()
   class Meta:
     model = AgentProfile
-    fields = ('agent', 'phone', 'key', 'name', 'postcode', 'address', 'push_token')
+    fields = ('id','agent', 'phone', 'key', 'name', 'postcode', 'address', 'push_token')
 
   def get_push_token(self, obj):
     if obj.agent.push_token:
