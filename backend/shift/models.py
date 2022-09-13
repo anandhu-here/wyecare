@@ -85,6 +85,21 @@ class Timesheets(models.Model):
     def __str__(self):
         return str(self.profile.first_name)
 
+class HomeNotifications(models.Model):
+    home = models.ForeignKey(HomeProfile, on_delete=models.CASCADE)
+    body = models.TextField(blank=True, null=True)
+    dealt = models.BooleanField(default=False)
+    date_added = models.DateTimeField(auto_now=True)
+    @property
+    def get_home_data(self):
+        return {
+            "home":self.home.name,
+            "id":self.home.id
+        }
+    
+    def __str__(self):
+        return str(self.id)
+
 
 class Notifications(models.Model):
     shift = models.ForeignKey(ShiftName, on_delete=models.CASCADE)
