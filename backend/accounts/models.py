@@ -228,11 +228,12 @@ class FollowerRelation(models.Model):
 
 def user_did_save(sender, instance, created, *args, **kwargs):
     if created:
+        print(instance.is_home, instance.is_agent, instance.is_carer, "pst ")
         if instance.is_home:
             HomeProfile.objects.get_or_create(home=instance)
         if instance.is_agent:
             AgentProfile.objects.get_or_create(agent=instance)
-        else:
+        if instance.is_carer:
             Profile.objects.get_or_create(user=instance)
 
 post_save.connect(user_did_save, sender=User)
