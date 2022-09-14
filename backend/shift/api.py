@@ -79,8 +79,8 @@ class NotificationListApi(generics.GenericAPIView):
         data = request.GET
         qs1 = Notifications.objects.all()
         qs2 = HomeNotifications.objects.all()
-        ser_1 = NotificationSerializer(qs1, many=True, context={"employee_id":False, "shift_ass_id":False})
-        ser_2 = HomeNotificationSerializer(qs2, many=True, context={"employee_id":False, "shift_ass_id":False})
+        ser_1 = NotificationSerializer(qs1, many=True, context={"employee_id":False, "shift_ass_id":False}).data
+        ser_2 = HomeNotificationSerializer(qs2, many=True, context={"employee_id":False, "shift_ass_id":False}).data
         final_list = sorted(chain(ser_1, ser_2), key=attrgetter('date_added'))
         return Response(NotificationSerializer(final_list, many=True, context={"employee_id":False, "shift_ass_id":False}).data, status=200)
         
