@@ -85,39 +85,46 @@ class Timesheets(models.Model):
     def __str__(self):
         return str(self.profile.first_name)
 
-class HomeNotifications(models.Model):
-    home = models.ForeignKey(HomeProfile, on_delete=models.CASCADE)
+class Notifications(models.Model):
+    home = models.ForeignKey(HomeProfile, on_delete=models.CASCADE, blank=True, null=True)
+    shift = models.ForeignKey(ShiftName, on_delete=models.CASCADE, blank=True, null=True)
     body = models.TextField(blank=True, null=True)
+    type = models.CharField(choices=((0, "SHIFT_ADD"), (1, "CANCEL_SHIFT"), (2, "SHIFT_ASSIGN")), max_length=100)
+    employee = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True, null=True)
     dealt = models.BooleanField(default=False)
     date_added = models.DateTimeField(auto_now=True)
     @property
     def get_home_data(self):
-        return {
+        if self.home:
+            return {
             "home":self.home.name,
             "id":self.home.id
-        }
+            }
+        else:
+            return False
+        
     
     def __str__(self):
         return str(self.id)
 
 
-class Notifications(models.Model):
-    shift = models.ForeignKey(ShiftName, on_delete=models.CASCADE)
-    type = models.CharField(choices=((0, "SHIFT_ADD"), (1, "CANCEL_SHIFT"), (2, "SHIFT_ASSIGN")), max_length=100)
-    body = models.TextField(blank=True, null=True)
-    dealt = models.BooleanField(default=False)
-    date_added = models.DateTimeField(auto_now=True)
-    employee = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True, null=True)
-    shift_ass = models.ForeignKey(ShiftAssignment, on_delete=models.CASCADE, blank=True, null=True)
-    @property
-    def get_home_data(self):
-        return {
-            "home":self.shift.home.name,
-            "id":self.shift.home.home.id
-        }
+# class Notifications(models.Model):
+#     shift = models.ForeignKey(ShiftName, on_delete=models.CASCADE)
+#     type = models.CharField(choices=((0, "SHIFT_ADD"), (1, "CANCEL_SHIFT"), (2, "SHIFT_ASSIGN")), max_length=100)
+#     body = models.TextField(blank=True, null=True)
+#     dealt = models.BooleanField(default=False)
+#     date_added = models.DateTimeField(auto_now=True)
+#     employee = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True, null=True)
+#     shift_ass = models.ForeignKey(ShiftAssignment, on_delete=models.CASCADE, blank=True, null=True)
+#     @property
+#     def get_home_data(self):
+#         return {
+#             "home":self.shift.home.name,
+#             "id":self.shift.home.home.id
+#         }
     
-    def __str__(self):
-        return str(self.id)
+#     def __str__(self):
+#         return str(self.id)
     
 def notify_shift_added(home, sender):
     # shiftname = ShiftName.objects.get(home=home)

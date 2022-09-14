@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from accounts.models import HomeProfile, Profile
 from accounts.serializer import HomeProfileSerializer, ProfileSerializer
-from .models import HomeNotifications, Notifications, ShiftAssignment, ShiftName, Timesheets
+from .models import Notifications, ShiftAssignment, ShiftName, Timesheets
 
 class ShiftSerializer(serializers.ModelSerializer):
     home = serializers.SerializerMethodField()
@@ -103,11 +103,7 @@ class ShiftAssignmentSerializer(serializers.ModelSerializer):
         pro = Profile.objects.get(id = id)
         return ProfileSerializer(pro, context={"shift_id":self.context["shift_id"]}).data
 
-class HomeNotificationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = HomeNotifications
-        fields = "__all__"
-        
+
 
 
 class NotificationSerializer(serializers.ModelSerializer):
@@ -125,17 +121,14 @@ class NotificationSerializer(serializers.ModelSerializer):
             id = self.context["employee_id"]
             return id
         else: 
-            return obj.employee.id
+            if obj.employee:
+                return obj.employee.id
+            else: return False
     def get_shift(self, obj):
-        shift = ShiftName.objects.get(id=obj.shift.id)
-        return ShiftSerializer(shift, context={"employee_id":False}).data
-
-    def get_shift_ass_id(self, obj):
-        if self.context["employee_id"]:
-            id = self.context["shift_ass_id"]
-            return id
-        else:
-            return obj.shift_ass.id
+        if obj.shift:
+            shift = ShiftName.objects.get(id=obj.shift.id)
+            return ShiftSerializer(shift, context={"employee_id":False}).data
+        return False
 class ShiftAssignSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShiftAssignment

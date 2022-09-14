@@ -1,10 +1,10 @@
 from rest_framework import generics, permissions, views, viewsets
 from rest_framework.response import Response
 from accounts.models import AgentProfile, Profile, User
-from .models import HomeNotifications, Notifications, ShiftAssignment, ShiftName, Timesheets
+from .models import  Notifications, ShiftAssignment, ShiftName, Timesheets
 from accounts.models import HomeProfile
 import requests as rq
-from .serializer import HomeNotificationSerializer, NotificationSerializer, ShiftAssignSerializer, ShiftAssignmentSerializer, ShiftSerializer, ShiftAssignedSerializer, TimesheetSerializer
+from .serializer import NotificationSerializer, ShiftAssignSerializer, ShiftAssignmentSerializer, ShiftSerializer, ShiftAssignedSerializer, TimesheetSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.parsers import MultiPartParser, FormParser
 import base64
@@ -77,12 +77,8 @@ class GetSpecificAss(generics.GenericAPIView):
 class NotificationListApi(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         data = request.GET
-        qs1 = Notifications.objects.all()
-        qs2 = HomeNotifications.objects.all()
-        ser_1 = list(NotificationSerializer(qs1, many=True, context={"employee_id":False, "shift_ass_id":False}).data)
-        ser_2 = list(HomeNotificationSerializer(qs2, many=True, context={"employee_id":False, "shift_ass_id":False}).data)
-        final_list = sorted(chain(ser_1, ser_2), key=attrgetter('date_added'))
-        return Response(NotificationSerializer(final_list, many=True, context={"employee_id":False, "shift_ass_id":False}).data, status=200)
+        qs1 = Notifications.objects.all().order_by("date_added")
+        return Response(NotificationSerializer(qs1, many=True, context={"employee_id":False, "shift_ass_id":False}).data, status=200)
         
 
 class TimesheetList(generics.ListAPIView):
