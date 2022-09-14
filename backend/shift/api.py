@@ -10,6 +10,9 @@ from rest_framework.parsers import MultiPartParser, FormParser
 import base64
 from django.core.files.base import ContentFile
 
+from operator import attrgetter
+from itertools import chain
+
 class Publish(generics.GenericAPIView):
     serializer_class = ShiftSerializer
     def post(self, request, *args, **kwargs):
@@ -74,8 +77,10 @@ class GetSpecificAss(generics.GenericAPIView):
 class NotificationListApi(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         data = request.GET
-        qs = Notifications.objects.all().order_by('-date_added')
-        return Response(NotificationSerializer(qs, many=True, context={"employee_id":False, "shift_ass_id":False}).data, status=200)
+        qs1 = Notifications.objects.all()
+        qs2 = HomeNotifications.objects.all()
+        final_list = sorted(chain(qs1, qs2), key=attrgetter('date_added'))
+        return Response(NotificationSerializer(final_list, many=True, context={"employee_id":False, "shift_ass_id":False}).data, status=200)
         
 
 class TimesheetList(generics.ListAPIView):
