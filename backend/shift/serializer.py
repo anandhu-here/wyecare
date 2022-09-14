@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from accounts.models import HomeProfile, Profile
 from accounts.serializer import HomeProfileSerializer, ProfileSerializer
-from .models import Notifications, ShiftAssignment, ShiftName, Timesheets
+from .models import HomeNotifications, Notifications, ShiftAssignment, ShiftName, Timesheets
 
 class ShiftSerializer(serializers.ModelSerializer):
     home = serializers.SerializerMethodField()
@@ -102,6 +102,13 @@ class ShiftAssignmentSerializer(serializers.ModelSerializer):
         id = ins.employee.id
         pro = Profile.objects.get(id = id)
         return ProfileSerializer(pro, context={"shift_id":self.context["shift_id"]}).data
+
+class HomeNotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HomeNotifications
+        fields = "__all__"
+        
+
 
 class NotificationSerializer(serializers.ModelSerializer):
     home = serializers.SerializerMethodField()

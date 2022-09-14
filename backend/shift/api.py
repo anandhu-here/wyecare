@@ -4,7 +4,7 @@ from accounts.models import AgentProfile, Profile, User
 from .models import HomeNotifications, Notifications, ShiftAssignment, ShiftName, Timesheets
 from accounts.models import HomeProfile
 import requests as rq
-from .serializer import NotificationSerializer, ShiftAssignSerializer, ShiftAssignmentSerializer, ShiftSerializer, ShiftAssignedSerializer, TimesheetSerializer
+from .serializer import HomeNotificationSerializer, NotificationSerializer, ShiftAssignSerializer, ShiftAssignmentSerializer, ShiftSerializer, ShiftAssignedSerializer, TimesheetSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.parsers import MultiPartParser, FormParser
 import base64
@@ -79,7 +79,9 @@ class NotificationListApi(generics.GenericAPIView):
         data = request.GET
         qs1 = Notifications.objects.all()
         qs2 = HomeNotifications.objects.all()
-        final_list = sorted(chain(qs1, qs2), key=attrgetter('date_added'))
+        ser_1 = NotificationSerializer(qs1, many=True, context={"employee_id":False, "shift_ass_id":False})
+        ser_2 = HomeNotificationSerializer(qs2, Many=True, context={"employee_id":False, "shift_ass_id":False})
+        final_list = sorted(chain(ser_1, ser_2), key=attrgetter('date_added'))
         return Response(NotificationSerializer(final_list, many=True, context={"employee_id":False, "shift_ass_id":False}).data, status=200)
         
 
