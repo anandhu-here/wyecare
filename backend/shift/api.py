@@ -144,7 +144,7 @@ def CancelRequest(request, *args, **kwargs):
         shift = ShiftName.objects.get(id=shift_id)
         noti = Notifications.objects.get_or_create(shift=shift, type=1, body=data["body"],dealt=False, employee=emp, shift_ass=ass)
         print(type(noti), "type of noti")
-        if type(noti)!="Tuple":
+        if type(noti)!= tuple:
             return Response(NotificationSerializer(noti, context={"employee_id":employee_id, "shift_ass_id":shift_ass_id}).data, status=200)
         else:
             return Response(NotificationSerializer(noti[0], context={"employee_id":employee_id, "shift_ass_id":shift_ass_id}).data, status=200)
