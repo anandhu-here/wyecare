@@ -142,7 +142,7 @@ def CancelRequest(request, *args, **kwargs):
         shift_ass_id = data["shift_ass_id"]
         ass = ShiftAssignment.objects.get(id=shift_ass_id)
         shift = ShiftName.objects.get(id=shift_id)
-        noti = Notifications.objects.create(shift=shift, type=1, body=data["body"],dealt=False, employee=emp, shift_ass=ass)
+        noti = Notifications.objects.get_or_create(shift=shift, type=1, body=data["body"],dealt=False, employee=emp, shift_ass=ass)
         return Response(NotificationSerializer(noti, context={"employee_id":employee_id, "shift_ass_id":shift_ass_id}).data, status=200)
 
 @api_view(["POST"])
