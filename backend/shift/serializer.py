@@ -116,6 +116,10 @@ class NotificationSerializer(serializers.ModelSerializer):
         fields = ('id', 'home', "shift","body", "dealt", "type", "date_added", "employee", "shift_ass_id")
     def get_home(self, obj):
         return obj.get_home_data
+    def get_shift_ass_id(self, obj):
+        if obj.shift_ass:
+            return obj.shift_ass.id
+        return False
     def get_employee(self, obj):
         if self.context["employee_id"]:
             id = self.context["employee_id"]
