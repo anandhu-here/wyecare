@@ -82,7 +82,7 @@ class NotificationListApi(generics.GenericAPIView):
         if not_type == "homea":
             qs1 = Notifications.objects.all().order_by("-date_added")
         elif not_type == "home":
-            qs1 = Notifications.objects.all(type=2).order_by("-date_added")
+            qs1 = Notifications.objects.filter(type=2).order_by("-date_added")
         return Response(NotificationSerializer(qs1, many=True, context={"employee_id":False, "shift_ass_id":False}).data, status=200)
         
 
