@@ -115,6 +115,7 @@ class NotificationSerializer(serializers.ModelSerializer):
         model = Notifications
         fields = ('id', 'home', "shift","body", "dealt", "type", "date_added", "employee", "shift_ass_id")
     def get_home(self, obj):
+        print(obj, "obj")
         return obj.get_home_data
     def get_shift_ass_id(self, obj):
         if obj.shift_ass:
