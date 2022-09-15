@@ -77,8 +77,12 @@ class GetSpecificAss(generics.GenericAPIView):
 class NotificationListApi(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         data = request.GET
-        not_type = int(data["type"])
-        qs1 = Notifications.objects.filter(type=not_type).order_by("-date_added")
+        not_type = data["type"]
+        print(not_type, "b")
+        if not_type == "homea":
+            qs1 = Notifications.objects.all().order_by("-date_added")
+        elif not_type == "home":
+            qs1 = Notifications.objects.all(type=2).order_by("-date_added")
         return Response(NotificationSerializer(qs1, many=True, context={"employee_id":False, "shift_ass_id":False}).data, status=200)
         
 
