@@ -93,6 +93,7 @@ class Notifications(models.Model):
     employee = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True, null=True)
     dealt = models.BooleanField(default=False)
     date_added = models.DateTimeField(auto_now=True)
+    shift_ass = models.ForeignKey(ShiftAssignment, on_delete=models.CASCADE, blank=True, null=True)
     @property
     def get_home_data(self):
         if self.home:
