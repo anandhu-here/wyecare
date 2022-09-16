@@ -4,7 +4,7 @@ from rest_framework import generics, permissions, views, viewsets
 from rest_framework.response import Response
 from knox.models import AuthToken
 from rest_framework.parsers import MultiPartParser, FormParser
-from .serializer import HomeProfileSerializer, ProfileSerializer, UserSerializer, RegisterSerializer, LoginSerializer, DocsSerializer
+from .serializer import DocumentSerializer, HomeProfileSerializer, ProfileSerializer, UserSerializer, RegisterSerializer, LoginSerializer, DocsSerializer
 import random
 from rest_framework import parsers
 from  rest_framework.permissions import IsAuthenticated
@@ -173,7 +173,7 @@ def getDocs(request, *args, **kwargs):
   if(request.method == "GET"):
     id = request.GET["profile_id"]
     docs = Documents.objects.all()
-    serializer = DocsSerializer(docs, many=True, context={"profile_id":id})
+    serializer = DocumentSerializer(docs, many=True, context={"profile_id":id})
     return Response(serializer.data, status=200)
 
 
