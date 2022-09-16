@@ -8,7 +8,7 @@ from .serializer import HomeProfileSerializer, ProfileSerializer, UserSerializer
 import random
 from rest_framework import parsers
 from  rest_framework.permissions import IsAuthenticated
-from .models import AgentProfile, HomeProfile, Profile, User, Docs
+from .models import AgentProfile, Documents, HomeProfile, Profile, User, Docs
 from rest_framework.decorators import api_view, permission_classes
 from django.core.mail import send_mail
 
@@ -172,8 +172,8 @@ def invite_homes(request, *args, **kwargs):
 def getDocs(request, *args, **kwargs):
   if(request.method == "GET"):
     id = request.GET["profile_id"]
-    docs = Docs.objects.filter(profile__id=id)
-    serializer = DocsSerializer(docs, many=True)
+    docs = Documents.objects.all()
+    serializer = DocsSerializer(docs, many=True, context={"profile_id":id})
     return Response(serializer.data, status=200)
 
 
@@ -183,7 +183,7 @@ class DocUploadView(views.APIView):
     print(request.data, "data", request.FILES)
     data = request.data
     file = data["file"]
-    doc_key=data["key"]
+    doc_key = data["key"]
     id = data["profile_id"]
     profile = Profile.objects.filter(id=id).first()
     if profile:

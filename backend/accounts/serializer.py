@@ -2,7 +2,7 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 
-from .models import AgentProfile, HomeProfile, Profile, TrainingCertificates, User, Docs
+from .models import AgentProfile, Documents, HomeProfile, Profile, TrainingCertificates, User, Docs
 from shift.models import ShiftAssignment
 class AgentProfileSerializer(serializers.ModelSerializer):
   push_token = serializers.SerializerMethodField()
@@ -31,6 +31,18 @@ class DocsSerializer(serializers.ModelSerializer):
   class Meta:
     model = Docs
     fields="__all__" 
+
+class DocumentSerializer(serializers.ModelSerializer):
+  check = serializers.SerializerMethodField(read_only = True)
+  class Meta:
+    model = Documents
+    fields = ("id", "name", "check")
+  def get_check(self, ins):
+    flag = False 
+    id = self.context["profile_id"]
+    for obj in Docs.objects.filter(profile__id=id):
+      if obj.name == ins.name:
+        flag = True
 
 class ProfileSerializer(serializers.ModelSerializer):
   position = serializers.SerializerMethodField()

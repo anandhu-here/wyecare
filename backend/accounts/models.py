@@ -221,6 +221,8 @@ class Documents(models.Model):
     def __str__(self):
         return self.name
 
+    
+
 class FollowerRelation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
