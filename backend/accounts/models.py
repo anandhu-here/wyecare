@@ -213,6 +213,7 @@ class Docs(models.Model):
     key = models.IntegerField(blank=True, null=True)
     file = models.FileField(upload_to=fileUPload, blank=True, null = True)
     Timestamp = models.DateTimeField(auto_now=True)
+    name = models.CharField(max_length=200, blank=True, null=True)
 
 class Documents(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True)
