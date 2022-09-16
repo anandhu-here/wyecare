@@ -40,10 +40,10 @@ class DocumentSerializer(serializers.ModelSerializer):
   def get_check(self, ins):
     flag = False 
     id = self.context["profile_id"]
-    print(Docs.objects.all(), id, "anandhuhuhuh")
     for obj in Docs.objects.filter(profile__id=id):
       if obj.name == ins.name:
         flag = True
+    return flag
 
 class ProfileSerializer(serializers.ModelSerializer):
   position = serializers.SerializerMethodField()
