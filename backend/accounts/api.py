@@ -187,7 +187,7 @@ class DocUploadView(views.APIView):
     id = data["profile_id"]
     profile = Profile.objects.filter(id=id).first()
     if profile:
-      doc = Docs.objects.create(profile=profile, key=doc_key, file=file)
+      doc = Docs.objects.create(profile=profile, key=doc_key, file=file, name = data["doc_name"])
       serializer = DocsSerializer(doc)
       return Response(serializer.data, status=201)
     else:
