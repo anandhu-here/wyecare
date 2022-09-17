@@ -12,5 +12,6 @@ urlpatterns = [
     path('upload-doc', DocUploadView.as_view()),
     path('get-docs', getDocs),
     path('delete-doc', deleteDoc),
-    path('search', search)
+    path('search', search),
+    path('join-request', joinRequest)
 ]

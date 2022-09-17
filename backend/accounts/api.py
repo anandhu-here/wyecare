@@ -222,4 +222,18 @@ def search(request, *args, **kwargs):
     ag_qs = AgentProfile.objects.filter(name__icontains=content)
     return Response(SearchAgentSerializer(ag_qs, many=True).data, status=200)
 
+@api_view(["POST"])
+def joinRequest(request, *args, **kwargs):
+  if(request.method == "POST"):
+    data = request.data
+    agency_id = data["agency_id"]
+    agency = AgentProfile.objects.filter(id=agency_id)
+    profile = Profile.objects.filter(id = data["id"])
+    if agency and profile:
+      if not agency in profile.agent.all():
+        profile.agent.add(agency)
+        profile.key = agency.key
+        return Response({"message":"success"}, status=201)
+      return Response({"message":"You have already joined this agency"}, status=400)
+    return Response({"message":"No agent found"}, status=400)
 
