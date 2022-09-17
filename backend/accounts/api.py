@@ -176,6 +176,13 @@ def getDocs(request, *args, **kwargs):
     serializer = DocumentSerializer(docs, many=True, context={"profile_id":id})
     return Response(serializer.data, status=200)
 
+@api_view(["POST"])
+def deleteDoc(request, *args, **kwargs):
+  if request.method == "POST":
+    id = request.data['doc_id']
+    docs = Docs.objects.delete(id=id)
+    return Response({}, status = 200)
+    
 
 class DocUploadView(views.APIView):
   parser_class = (MultiPartParser, FormParser)
