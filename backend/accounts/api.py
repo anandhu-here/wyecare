@@ -182,6 +182,7 @@ def deleteDoc(request, *args, **kwargs):
     id = request.data['doc_id']
     doc = Docs.objects.filter(id = id).first()
     if doc:
+      print(doc.name, "anandhu satheesh" )
       doc.delete()
 
       return Response({}, status = 200)
