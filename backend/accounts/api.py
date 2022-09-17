@@ -241,6 +241,7 @@ def joinRequest(request, *args, **kwargs):
     if agency and profile:
       if not agency in profile.agent.all():
         ir = InviteRequests.objects.get_or_create(agencyId=agency_id, profileId=profile_id)
+        print(ir, "irr")
         if not type(ir) == tuple:
           return Response(IRSerializer(ir).data, status=200)
         else:
