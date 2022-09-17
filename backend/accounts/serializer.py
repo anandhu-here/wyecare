@@ -63,7 +63,7 @@ class ProfileSerializer(serializers.ModelSerializer):
   def get_background(self, obj):
     background = {"start":False, "end":"notyet", "emp_name":False, "emp_id":False}
     t = Timesheets.objects.filter(profile=obj).filter(shiftname__agent__key=obj.key).first()
-    print(obj.agent, "agent")
+    print(obj.agent.all(), "agent")
 
   def get_push_token(self, obj):
     return obj.user.push_token
