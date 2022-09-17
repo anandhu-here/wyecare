@@ -1,6 +1,6 @@
 from collections import UserList
 from django.urls import path
-from .api import RegisterAPI, LoginAPI, UserListView, UserAPI, deleteDoc, getDocs, getProfile, invite_homes    , DocUploadView, search
+from .api import RegisterAPI, LoginAPI, UserListView, UserAPI, deleteDoc, getDocs, getProfile, invite_homes    , DocUploadView, joinRequest, search
 
 urlpatterns = [
     path('signup', RegisterAPI.as_view()),
