@@ -243,7 +243,7 @@ def joinRequest(request, *args, **kwargs):
         ir = InviteRequests.objects.get_or_create(agencyId=agency_id, profileId=profile_id)
         print(ir, "irr")
         if ir[1] == True:
-          return Response(IRSerializer(ir[0]).data, status=200)
+          return Response({"message":"success"}, status=200)
         else:
           return Response({"message":"Already sent a request"}, status=200)
       return Response({"message":"You have already joined this agency"}, status=200)
