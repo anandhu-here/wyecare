@@ -4,6 +4,8 @@ from django.contrib.auth import authenticate
 
 from .models import AgentProfile, Documents, HomeProfile, Profile, TrainingCertificates, User, Docs
 from shift.models import ShiftAssignment, Timesheets
+from datetime import datetime
+
 class AgentProfileSerializer(serializers.ModelSerializer):
   push_token = serializers.SerializerMethodField()
   class Meta:
@@ -61,7 +63,7 @@ class ProfileSerializer(serializers.ModelSerializer):
   def get_background(self, obj):
     background = {"start":False, "end":"notyet"}
     t = Timesheets.objects.filter(profile=obj).filter(shiftname__agent__key=obj.key).first()
-    print(t, "nannan")
+    print(t, "nannan", datetime.date(t.timestamp))
 
   def get_push_token(self, obj):
     return obj.user.push_token
