@@ -3,7 +3,7 @@ from rest_framework import serializers
 from django.contrib.auth import authenticate
 
 from .models import AgentProfile, Documents, HomeProfile, Profile, TrainingCertificates, User, Docs
-from shift.models import ShiftAssignment
+from shift.models import ShiftAssignment, Timesheets
 class AgentProfileSerializer(serializers.ModelSerializer):
   push_token = serializers.SerializerMethodField()
   class Meta:
@@ -52,11 +52,17 @@ class ProfileSerializer(serializers.ModelSerializer):
   ass_data = serializers.SerializerMethodField()
   push_token = serializers.SerializerMethodField()
   agent = serializers.SerializerMethodField()
+  background = serializers.SerializerMethodField()
   class Meta:
     model = Profile 
-    fields = ['id', 'first_name', 'last_name', 'user', 'position', "trainings", "ass_data", "push_token", "agent"]
+    fields = ['id', 'first_name', 'last_name', 'user', 'position', "trainings", "ass_data", "push_token", "agent", "background"]
   def get_position(self, obj):
     return obj.get_pos
+  def get_background(self, obj):
+    background = {"start":False, "end":"notyet"}
+    t = Timesheets.objects.filter(profile=obj).filter(shiftname__agent__key=obj.key).first()
+    print(t, "nannan")
+
   def get_push_token(self, obj):
     return obj.user.push_token
   def get_agent(self, obj):
@@ -76,17 +82,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         return {"selected":False, "color":False, "ass_id":False}
     else:
       pass
-  # def get_color(self, obj):
-  #   context = self.context["shift_id"]
-  #   if context:
-  #     id = int(self.context["shift_id"])
-  #     shiftAss = ShiftAssignment.objects.filter(shiftname_id=id).filter(employee_id=obj.id).first()
-  #     if shiftAss and shiftAss.employee.id == obj.id:
-  #       return shiftAss.color 
-  #     else:
-  #       return False
-  #   else:
-  #     pass
+  
   def get_trainings(self, obj):
     return TrainingSerializer(TrainingCertificates.objects.filter(profile=obj), many=True).data
 

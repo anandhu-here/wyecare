@@ -98,14 +98,7 @@ class TimesheetList(generics.ListAPIView):
 
 class AssignShift(generics.GenericAPIView):
     serializer_class = ShiftAssignmentSerializer
-    # def get_serializer_context(self):
-    #     context = super(AssignShift, self).get_serializer_context()
-    #     context.update({"shift_id":assigned_shift[0]['shift_id']})
-    #     return context
     def post(self, request, *args, **kwargs):
-        # shift_id = request.data['id']
-        # user_id = request.data['user_id']
-        # home_id = request.data['home_id']
         assigned_shift = request.data['assigned']
         print(assigned_shift, "assigned")
         qs_ass = ShiftAssignment.objects.filter(shiftname_id=assigned_shift[0]["shift_id"])
@@ -156,6 +149,7 @@ def WriteTimesheet(request, *args, **kwargs):
     profile = Profile.objects.get(id=data['profile_id'])
     home = HomeProfile.objects.get(id=data['home_id'])
     shiftname = ShiftName.objects.get(id=data['shift_id'])
+    
     shift_ass = ShiftAssignment.objects.filter(shiftname=shiftname).filter(employee=profile).first()
     img_data = data["image"]
     format, imgstr = img_data.split(';base64,')

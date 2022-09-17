@@ -14,7 +14,8 @@ from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from django.db.models.signals import post_save
 
-    
+from datetime import datetime
+
 
 class UserManager(BaseUserManager):
     def create_user(self, email, push_token=None, password=None, is_staff=False, is_active=True,  is_agent = False, is_admin=False, is_home = False, is_carer=False):
@@ -191,6 +192,7 @@ class Profile(models.Model):
             return str(self.first_name) + " " + str(self.last_name) + " " + str(self.id)
         else:
             return self.user.email
+    
     
 class TrainingCertificates(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
