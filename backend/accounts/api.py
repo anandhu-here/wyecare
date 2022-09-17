@@ -4,11 +4,11 @@ from rest_framework import generics, permissions, views, viewsets
 from rest_framework.response import Response
 from knox.models import AuthToken
 from rest_framework.parsers import MultiPartParser, FormParser
-from .serializer import DocumentSerializer, HomeProfileSerializer, ProfileSerializer, SearchAgentSerializer, UserSerializer, RegisterSerializer, LoginSerializer, DocsSerializer
+from .serializer import DocumentSerializer, HomeProfileSerializer, IRSerializer, ProfileSerializer, SearchAgentSerializer, UserSerializer, RegisterSerializer, LoginSerializer, DocsSerializer
 import random
 from rest_framework import parsers
 from  rest_framework.permissions import IsAuthenticated
-from .models import AgentProfile, Documents, HomeProfile, Profile, User, Docs
+from .models import AgentProfile, Documents, HomeProfile, InviteRequests, Profile, User, Docs
 from rest_framework.decorators import api_view, permission_classes
 from django.core.mail import send_mail
 
@@ -222,17 +222,33 @@ def search(request, *args, **kwargs):
     ag_qs = AgentProfile.objects.filter(name__icontains=content)
     return Response(SearchAgentSerializer(ag_qs, many=True).data, status=200)
 
+@api_view(["GET"])
+def getIr(request, *args, **kwargs):
+  if request.method == "GET":
+    ag_id = request.GET["agency_id"]
+    qs = InviteRequests.objects.filter(agencyId=ag_id)
+    return Response(IRSerializer(qs, many=True).data, status=200)
+
+
 @api_view(["POST"])
 def joinRequest(request, *args, **kwargs):
+  if request.method == "POST":
+    data = request.data
+    ir = InviteRequests.objects.get_or_create(agencyId=data["agency_id"], profileId=data["profile_id"])
+    return Response({"agency_id":ir.agencyId, "profile_id":ir.profileId}, status=200)
+
+@api_view(["POST"])
+def joinRequestAccept(request, *args, **kwargs):
   if(request.method == "POST"):
     data = request.data
     agency_id = data["agency_id"]
-    agency = AgentProfile.objects.filter(id=agency_id)
-    profile = Profile.objects.filter(id = data["id"])
+    agency = AgentProfile.objects.filter(id=agency_id).first()
+    profile = Profile.objects.filter(id = data["id"]).first()
     if agency and profile:
       if not agency in profile.agent.all():
         profile.agent.add(agency)
         profile.key = agency.key
+
         return Response({"message":"success"}, status=201)
       return Response({"message":"You have already joined this agency"}, status=400)
     return Response({"message":"No agent found"}, status=400)

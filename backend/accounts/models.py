@@ -193,6 +193,11 @@ class Profile(models.Model):
         else:
             return self.user.email
     
+class InviteRequests(models.Model):
+    profileId = models.IntegerField()
+    agencyId = models.IntegerField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    
     
 class TrainingCertificates(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)

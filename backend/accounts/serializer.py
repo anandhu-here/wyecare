@@ -1,8 +1,9 @@
 
+from backend.shift import serializer
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 
-from .models import AgentProfile, Documents, HomeProfile, Profile, TrainingCertificates, User, Docs
+from .models import AgentProfile, Documents, HomeProfile, InviteRequests, Profile, TrainingCertificates, User, Docs
 from shift.models import ShiftAssignment, Timesheets
 from datetime import datetime
 
@@ -148,7 +149,10 @@ class LoginSerializer(serializers.Serializer):
       return user
     raise serializers.ValidationError("Incorrect Credentials")
 
-
+class IRSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = InviteRequests
+    fields = "__all__"
 
 class SearchAgentSerializer(serializers.ModelSerializer):
   class Meta:
