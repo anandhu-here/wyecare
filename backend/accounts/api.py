@@ -180,9 +180,12 @@ def getDocs(request, *args, **kwargs):
 def deleteDoc(request, *args, **kwargs):
   if request.method == "POST":
     id = request.data['doc_id']
-    docs = Docs.objects.delete(id=id)
-    return Response({}, status = 200)
-    
+    doc = Docs.objects.filter(id = id).first()
+    if doc:
+      doc.delete()
+
+      return Response({}, status = 200)
+    return Response({}, status = 400)
 
 class DocUploadView(views.APIView):
   parser_class = (MultiPartParser, FormParser)
