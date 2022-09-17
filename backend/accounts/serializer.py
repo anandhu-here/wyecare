@@ -43,7 +43,7 @@ class DocumentSerializer(serializers.ModelSerializer):
     for obj in Docs.objects.filter(profile__id=id):
       if obj.name == ins.name:
         flag["check"] = True
-      flag["id"] = obj.id
+        flag["id"] = obj.id
     return flag
 
 class ProfileSerializer(serializers.ModelSerializer):
