@@ -234,9 +234,17 @@ def getIr(request, *args, **kwargs):
 def joinRequest(request, *args, **kwargs):
   if request.method == "POST":
     data = request.data
-    ir = InviteRequests.objects.get_or_create(agencyId=data["agency_id"], profileId=data["profile_id"])
-    return Response({"agency_id":ir.agencyId, "profile_id":ir.profileId}, status=200)
-
+    agency_id = data["agency_id"]
+    profile_id = data["profile_id"]
+    agency = AgentProfile.objects.filter(id=agency_id).first()
+    profile = Profile.objects.filter(id = profile_id).first()
+    if agency and profile:
+      if not agency in profile.agent.all():
+        ir = InviteRequests.objects.get_or_create(agencyId=agency_id, profileId=profile_id)
+        return Response({"agency_id":ir.agencyId, "profile_id":ir.profileId}, status=200)
+      return Response({"message":"You have already joined this agency"}, status=400)
+    return Response({"message":"No agent found"}, status=400)
+    
 @api_view(["POST"])
 def joinRequestAccept(request, *args, **kwargs):
   if(request.method == "POST"):

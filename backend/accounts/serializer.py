@@ -1,5 +1,4 @@
 
-from backend.shift import serializer
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 
