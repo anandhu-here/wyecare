@@ -74,7 +74,6 @@ class ProfileSerializer(serializers.ModelSerializer):
     else: return False
   def get_ass_data(self, obj):
     context = self.context["shift_id"]
-    
     if context:
       id = int(self.context["shift_id"])
       shiftAss = ShiftAssignment.objects.filter(shiftname_id=id).filter(employee_id=obj.id).first()
@@ -150,3 +149,8 @@ class LoginSerializer(serializers.Serializer):
     raise serializers.ValidationError("Incorrect Credentials")
 
 
+
+class SearchAgentSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = AgentProfile
+    fields = "__all__"

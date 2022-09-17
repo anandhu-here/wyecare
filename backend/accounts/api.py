@@ -4,7 +4,7 @@ from rest_framework import generics, permissions, views, viewsets
 from rest_framework.response import Response
 from knox.models import AuthToken
 from rest_framework.parsers import MultiPartParser, FormParser
-from .serializer import DocumentSerializer, HomeProfileSerializer, ProfileSerializer, UserSerializer, RegisterSerializer, LoginSerializer, DocsSerializer
+from .serializer import DocumentSerializer, HomeProfileSerializer, ProfileSerializer, SearchAgentSerializer, UserSerializer, RegisterSerializer, LoginSerializer, DocsSerializer
 import random
 from rest_framework import parsers
 from  rest_framework.permissions import IsAuthenticated
@@ -213,3 +213,13 @@ class DocUploadView(views.APIView):
 def upload_trainings(request, *args, **kwargs):
   if(request.method == "POST"):
     pass
+
+
+@api_view(["GET"])
+def search(request, *args, **kwargs):
+  if(request.method == "GET"):
+    content = request.GET["content"]
+    ag_qs = AgentProfile.objects.filter(name__icontains=content)
+    return Response(SearchAgentSerializer(ag_qs, many=True).data, status=200)
+
+
