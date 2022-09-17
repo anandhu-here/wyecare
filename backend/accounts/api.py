@@ -242,7 +242,7 @@ def joinRequest(request, *args, **kwargs):
       if not agency in profile.agent.all():
         ir = InviteRequests.objects.get_or_create(agencyId=agency_id, profileId=profile_id)
         print(ir, "irr")
-        if not type(ir) == tuple:
+        if ir[1] == True:
           return Response(IRSerializer(ir).data, status=200)
         else:
           return Response({"message":"Already sent a request"}, status=200)
