@@ -149,9 +149,13 @@ class LoginSerializer(serializers.Serializer):
     raise serializers.ValidationError("Incorrect Credentials")
 
 class IRSerializer(serializers.ModelSerializer):
+  name = serializers.SerializerMethodField(read_only=True)
   class Meta:
     model = InviteRequests
-    fields = "__all__"
+    fields = ("id", "timestamp", "agencyId", "profileId", "name")
+  def get_name(self, obj):
+    p = Profile.objects.get(id=obj.profileId)
+    return p.first_name + p.last_name
 
 class SearchAgentSerializer(serializers.ModelSerializer):
   push_token = serializers.SerializerMethodField(read_only=True)
