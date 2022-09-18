@@ -63,28 +63,32 @@ class ProfileSerializer(serializers.ModelSerializer):
   push_token = serializers.SerializerMethodField()
   agent = serializers.SerializerMethodField()
   background = serializers.SerializerMethodField()
-  agencies = serializers.SerializerMethodField()
+  bg = serializers.SerializerMethodField()
   class Meta:
     model = Profile 
-    fields = ['id', 'first_name', 'last_name', 'user', 'position', "trainings", "ass_data", "push_token", "agent", "background", "agencies"]
+    fields = ['id', 'first_name', 'last_name', 'user', 'position', "trainings", "ass_data", "push_token", "agent", "background", "bg"]
   def get_position(self, obj):
     return obj.get_pos
   def get_background(self, obj):
     background = {"start":False, "end":"notyet", "emp_name":False, "emp_id":False}
     t = Timesheets.objects.filter(profile=obj).filter(shiftname__agent__key=obj.key).first()
     print(obj.agent.all(), "agent")
-  def get_agencies(self, obj):
-    bg = []
+  def get_bg(self, obj):
+    bg_ = []
     qs = obj.agent.all()
     for ag in qs:
+      bg = {"employee_name":ag.name, "employee_id":ag.id, "start_date":False, "end_date":False}
       t = Timesheets.objects.filter(profile=obj).filter(shiftname__agent=ag)
       f = t.first()
       l = t.last()
-      print(datetime.date(f.timestamp), "timestamp")
-      bg.append({"employer_name":ag.name, "employer_id":ag.id, "start_date":datetime.date(f.timestamp), "end_date":False})
-      if obj.key == ag.key:
-        bg["end_date"] = l.timestamp
-    return bg
+      if f:
+        bg["start_date"] = f.timestamp
+      
+      if obj.key != ag.key:
+        if l:
+          bg["end_date"] = l.timestamp
+      bg_.append(bg)
+    return bg_
   def get_push_token(self, obj):
     return obj.user.push_token
   def get_agent(self, obj):
