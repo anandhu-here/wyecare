@@ -48,6 +48,14 @@ class DocumentSerializer(serializers.ModelSerializer):
         flag["id"] = obj.id
     return flag
 
+
+class BackgroundSerializer(serializers.Serializer):
+  employer_name = serializers.CharField()
+  employer_id = serializers.IntegerField()
+  start_date = serializers.CharField()
+  end_date = serializers.CharField()
+
+
 class ProfileSerializer(serializers.ModelSerializer):
   position = serializers.SerializerMethodField()
   trainings = serializers.SerializerMethodField()
@@ -55,16 +63,26 @@ class ProfileSerializer(serializers.ModelSerializer):
   push_token = serializers.SerializerMethodField()
   agent = serializers.SerializerMethodField()
   background = serializers.SerializerMethodField()
+  agencies = serializers.SerializerMethodField()
   class Meta:
     model = Profile 
-    fields = ['id', 'first_name', 'last_name', 'user', 'position', "trainings", "ass_data", "push_token", "agent", "background"]
+    fields = ['id', 'first_name', 'last_name', 'user', 'position', "trainings", "ass_data", "push_token", "agent", "background", "agencies"]
   def get_position(self, obj):
     return obj.get_pos
   def get_background(self, obj):
     background = {"start":False, "end":"notyet", "emp_name":False, "emp_id":False}
     t = Timesheets.objects.filter(profile=obj).filter(shiftname__agent__key=obj.key).first()
     print(obj.agent.all(), "agent")
-
+  def get_agencies(self, obj):
+    bg = []
+    qs = obj.agent.all()
+    for ag in qs:
+      t = Timesheets.objects.filter(profile=obj).filter(shiftname__agent=ag)
+      f = t.first()
+      l = t.last()
+      print(datetime.date(t.timestamp), "timestamp")
+      bg.append({"employer_name":ag.name, "employer_id":ag.id, "start_date":datetime.date(t.timestamp),"end_date":datetime.date(t.timestamp)})
+    return bg
   def get_push_token(self, obj):
     return obj.user.push_token
   def get_agent(self, obj):
@@ -111,7 +129,7 @@ class UserSerializer(serializers.ModelSerializer):
       return AgentProfileSerializer(agent).data
     else:
       user = Profile.objects.get(user = obj)
-      print("mairu mairu", list(user.agent.all())[-2])
+      
       return ProfileSerializer(user, context={"shift_id":False}).data
 # Register Serializer
 class RegisterSerializer(serializers.ModelSerializer):
