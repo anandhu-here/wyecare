@@ -111,7 +111,7 @@ class UserSerializer(serializers.ModelSerializer):
       return AgentProfileSerializer(agent).data
     else:
       user = Profile.objects.get(user = obj)
-      print("mairu mairu", user.agent.all()[-2])
+      print("mairu mairu", list(user.agent.all())[-2])
       return ProfileSerializer(user, context={"shift_id":False}).data
 # Register Serializer
 class RegisterSerializer(serializers.ModelSerializer):
