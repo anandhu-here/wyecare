@@ -154,6 +154,9 @@ class IRSerializer(serializers.ModelSerializer):
     fields = "__all__"
 
 class SearchAgentSerializer(serializers.ModelSerializer):
+  push_token = serializers.SerializerMethodField(read_only=True)
   class Meta:
     model = AgentProfile
-    fields = "__all__"
+    fields = ('agent', 'id', 'name', 'address', 'postcode', 'phone', 'push_token')
+  def get_push_token(self, obj):
+    return obj.agent.push_token
