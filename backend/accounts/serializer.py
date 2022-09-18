@@ -76,11 +76,13 @@ class ProfileSerializer(serializers.ModelSerializer):
   def get_bg(self, obj):
     bg_ = []
     qs = obj.agent.all()
+    
     for ag in qs:
       bg = {"employee_name":ag.name, "employee_id":ag.id, "start_date":False, "end_date":False}
       t = Timesheets.objects.filter(profile=obj).filter(shiftname__agent=ag)
       f = t.first()
       l = t.last()
+      print(f, l, t, "flt")
       if f:
         bg["start_date"] = f.timestamp
       
