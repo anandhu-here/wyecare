@@ -261,7 +261,7 @@ def joinRequestAccept(request, *args, **kwargs):
       if not agency in profile.agent.all():
         profile.agent.add(agency)
         profile.key = agency.key
-
+        profile.save()
         return Response({"message":"success"}, status=201)
       return Response({"message":"You have already joined this agency"}, status=400)
     return Response({"message":"No agent found"}, status=400)
