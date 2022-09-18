@@ -89,7 +89,7 @@ class Notifications(models.Model):
     home = models.ForeignKey(HomeProfile, on_delete=models.CASCADE, blank=True, null=True)
     shift = models.ForeignKey(ShiftName, on_delete=models.CASCADE, blank=True, null=True)
     body = models.TextField(blank=True, null=True)
-    type = models.IntegerField(choices=((0, "SHIFT_ADD"), (1, "CANCEL_SHIFT"), (2, "SHIFT_ASSIGN")), max_length=100)
+    type = models.IntegerField(choices=((0, "SHIFT_ADD"), (1, "CANCEL_SHIFT"), (2, "SHIFT_ASSIGN")), max_length=100, blank=True, null=True)
     employee = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True, null=True)
     dealt = models.BooleanField(default=False)
     date_added = models.DateTimeField(auto_now=True)
