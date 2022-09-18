@@ -93,7 +93,7 @@ class UserSerializer(serializers.ModelSerializer):
   type = serializers.SerializerMethodField()
   class Meta:
     model = User
-    fields = ('id', 'email', 'last_login', "first_login", "staff", "admin", "home", "carer", "nurse", "agent", "profile", "type", "push_token")
+    fields = ('id', 'email', 'last_login', "first_login", "staff", "admin", "home", "carer", "nurse", "agent", "profile", "type", "push_token",)
   def get_type(self, obj):
     if obj.home:
       return "HOME"
@@ -102,6 +102,7 @@ class UserSerializer(serializers.ModelSerializer):
     else:
       return "CARER"
   def get_profile(self, obj):
+    
     if(obj.home):
       profile = HomeProfile.objects.get(home = obj)
       return HomeProfileSerializer(profile).data
@@ -110,7 +111,7 @@ class UserSerializer(serializers.ModelSerializer):
       return AgentProfileSerializer(agent).data
     else:
       user = Profile.objects.get(user = obj)
-      print("mairu mairu")
+      print("mairu mairu", user.agent.all())
       return ProfileSerializer(user, context={"shift_id":False}).data
 # Register Serializer
 class RegisterSerializer(serializers.ModelSerializer):
