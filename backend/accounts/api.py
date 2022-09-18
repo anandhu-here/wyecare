@@ -256,7 +256,7 @@ def joinRequestAccept(request, *args, **kwargs):
     agency_id = data["agency_id"]
     agency = AgentProfile.objects.filter(id=agency_id).first()
     profile = Profile.objects.filter(id = data["id"]).first()
-    print(agency, profile, "anananjij iji j i i", agency.key)
+    print(profile.agent.all(), "all")
     if agency and profile:
       if not agency in profile.agent.all():
         profile.agent.add(agency)
