@@ -46,7 +46,7 @@ class DocumentSerializer(serializers.ModelSerializer):
       if obj.name == ins.name:
         flag["check"] = True
         flag["id"] = obj.id
-        print(obj.file, "file")
+        print(obj.file.url, "file")
     return flag
 
 
