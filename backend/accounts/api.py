@@ -4,7 +4,7 @@ from rest_framework import generics, permissions, views, viewsets
 from rest_framework.response import Response
 from knox.models import AuthToken
 from rest_framework.parsers import MultiPartParser, FormParser
-from .serializer import DocumentSerializer, HomeProfileSerializer, IRSerializer, ProfileSerializer, SearchAgentSerializer, UserSerializer, RegisterSerializer, LoginSerializer, DocsSerializer
+from .serializer import CarerSerializer, DocumentSerializer, HomeProfileSerializer, IRSerializer, ProfileSerializer, SearchAgentSerializer, UserSerializer, RegisterSerializer, LoginSerializer, DocsSerializer
 import random
 from rest_framework import parsers
 from  rest_framework.permissions import IsAuthenticated
@@ -133,6 +133,19 @@ def getProfile(request, *args, **kwargs):
   return Response({
     "user":ProfileSerializer(user).data
   })
+
+@api_view(["GET"])
+def getStaffs(request, *args, **kwargs):
+  user = request.user
+  type = request.GET.get('type')
+  agent = AgentProfile.objects.filter(agent=user).first()
+  if agent and user.is_agent:
+    if type == "CARER":
+      qs = Profile.objects.filter(key=agent.key)
+      return Response(CarerSerializer(qs, many=True).data, status=200)
+    return Response({}, status=400)
+  return Response({}, status=400)
+
 
 @api_view(["GET"])
 def UserListView(request, *args, **kwargs):

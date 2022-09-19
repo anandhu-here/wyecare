@@ -55,6 +55,10 @@ class BackgroundSerializer(serializers.Serializer):
   start_date = serializers.CharField()
   end_date = serializers.CharField()
 
+class CarerSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Profile
+    fields = "__all__"
 
 class ProfileSerializer(serializers.ModelSerializer):
   position = serializers.SerializerMethodField()
