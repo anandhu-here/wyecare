@@ -40,12 +40,13 @@ class DocumentSerializer(serializers.ModelSerializer):
     model = Documents
     fields = ("id", "name", "check")
   def get_check(self, ins):
-    flag = {"check":False, "id":False}
+    flag = {"check":False, "id":False, "file":False}
     id = self.context["profile_id"]
     for obj in Docs.objects.filter(profile__id=id):
       if obj.name == ins.name:
         flag["check"] = True
         flag["id"] = obj.id
+        flag["file"] = obj.file
     return flag
 
 
