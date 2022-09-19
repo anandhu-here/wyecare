@@ -142,7 +142,7 @@ def getStaffs(request, *args, **kwargs):
   if agent and user.is_agent:
     if type == "CARER":
       qs = Profile.objects.filter(key=agent.key)
-      return Response(CarerSerializer(qs, many=True).data, status=200)
+      return Response(ProfileSerializer(qs, many=True, context={"shift_id":False}).data, status=200)
     return Response({}, status=400)
   return Response({}, status=400)
 
