@@ -80,16 +80,15 @@ class ProfileSerializer(serializers.ModelSerializer):
     for ag in qs:
       bg = {"employee_name":ag.name, "employee_id":ag.id, "start_date":False, "end_date":False}
       t = Timesheets.objects.filter(profile=obj).filter(shiftname__agent__id=ag.id)
-      print(Timesheets.objects.all(), "ttttttttttttttttttttt")
       f = t.first()
       l = t.last()
       print(f, l, t, "flt")
       if f:
-        bg["start_date"] = f.timestamp
+        bg["start_date"] = datetime.date(f.timestamp)
       
       if obj.key != ag.key:
         if l:
-          bg["end_date"] = l.timestamp
+          bg["end_date"] = datetime.date(l.timestamp)
       bg_.append(bg)
     return bg_
   def get_push_token(self, obj):
