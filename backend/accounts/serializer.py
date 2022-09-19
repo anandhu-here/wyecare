@@ -68,15 +68,18 @@ class ProfileSerializer(serializers.ModelSerializer):
   agent = serializers.SerializerMethodField()
   background = serializers.SerializerMethodField()
   bg = serializers.SerializerMethodField()
+  email = serializers.SerializerMethodField()
   class Meta:
     model = Profile 
-    fields = ['id', 'first_name', 'last_name', 'user', 'position', "trainings", "ass_data", "push_token", "agent", "background", "bg"]
+    fields = ['id', 'first_name', 'last_name', 'user','email', 'position', "trainings", "ass_data", "push_token", "agent", "background", "bg"]
   def get_position(self, obj):
     return obj.get_pos
   def get_background(self, obj):
     background = {"start":False, "end":"notyet", "emp_name":False, "emp_id":False}
     t = Timesheets.objects.filter(profile=obj).filter(shiftname__agent__key=obj.key).first()
     print(obj.agent.all(), "agent")
+  def get_email(self, obj):
+    return obj.user.email
   def get_bg(self, obj):
     bg_ = []
     qs = obj.agent.all()
