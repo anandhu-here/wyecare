@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .api import AssignShift, CancelRequest, NotificationListApi, Publish, PublishBulk, RejectCarer, ShiftListApi, AssignedList, TimesheetList, WriteTimesheet, replaceAssigned
+from .api import AssignShift, CancelRequest, NotificationListApi, Publish, PublishBulk, RejectCarer, ShiftListApi, AssignedList, TimesheetList, WriteTimesheet, get_anal_res, get_in_data, replaceAssigned
 
 urlpatterns = [
     path('shift-publish', Publish.as_view() ),
@@ -13,5 +13,7 @@ urlpatterns = [
     path('write-timesheet', WriteTimesheet),
     path('get-timesheets', TimesheetList.as_view()),
     path('cancel-request', CancelRequest ),
-    path('replace', replaceAssigned)
+    path('replace', replaceAssigned),
+    path('get-in', get_in_data),
+    path('get-anal', get_anal_res)
 ]
