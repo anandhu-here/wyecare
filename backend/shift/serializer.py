@@ -6,6 +6,11 @@ from accounts.models import HomeProfile, Profile
 from accounts.serializer import HomeProfileSerializer, ProfileSerializer
 from .models import Notifications, ShiftAssignment, ShiftName, Timesheets
 
+class ShiftInvSer(serializers.ModelSerializer):
+    class Meta:
+        model = ShiftName
+        fields = "__all__"
+
 class ShiftSerializer(serializers.ModelSerializer):
     home = serializers.SerializerMethodField()
     assigned = serializers.SerializerMethodField()
