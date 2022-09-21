@@ -162,7 +162,8 @@ def get_in_data(request, *args, **kwargs):
 def get_anal_res(request):
     if request.method == "GET":
         data = request.GET
-        mon = data["month"]
+        mon = int(data["month"])
+        print(mon)
         if mon < 6:
             qs = ShiftName.objects.filter(agent__id=data["ag_id"]).filter(year=data["year"]).filter(month__range=(0,5))
             return Response(ShiftInvSer(qs, many=True).data, status=200)
