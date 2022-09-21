@@ -4,7 +4,7 @@ from accounts.models import AgentProfile, Profile, User
 from .models import  Notifications, ShiftAssignment, ShiftName, Timesheets
 from accounts.models import HomeProfile
 import requests as rq
-from .serializer import NotificationSerializer, ShiftAssignSerializer, ShiftAssignmentSerializer, ShiftSerializer, ShiftAssignedSerializer, TimesheetSerializer
+from .serializer import NotificationSerializer, ShiftAssignSerializer, ShiftAssignmentSerializer, ShiftInvSer, ShiftSerializer, ShiftAssignedSerializer, TimesheetSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.parsers import MultiPartParser, FormParser
 import base64
@@ -143,15 +143,30 @@ def CancelRequest(request, *args, **kwargs):
             return Response(NotificationSerializer(noti[0], context={"employee_id":employee_id, "shift_ass_id":shift_ass_id}).data, status=200)
 
 
-# @api_view(["GET"])
-# def get_in_data(request, *args, **kwargs):
-#     if request.method == "GET":
-#         data = request.GET
-#         mon = data["month"]
-#         day = data["day"]
-#         year = data["year"]
-#         # qs = ShiftName.objects.filter(year=year).filter(month__range=())
+@api_view(["GET"])
+def get_in_data(request, *args, **kwargs):
+    if request.method == "GET":
+        data = request.GET
+        mon1 = data["month1"]
+        mon2 = data["month2"]
+        day1 = data["day1"]
+        day2 = data["day2"]
+        year = data["year"]
+        home_id = data["home_id"]
+        agent_id = data["agent_id"]
+        qs = ShiftName.objects.filter(agent__id=agent_id).filter(home__id=home_id).filter(year=year).filter(month__range=(mon1, mon2)).filter(day__range=(day1, day2))
+        
+        return Response(ShiftInvSer(qs, many=True).data, status = 200)
 
+@api_view(["GET"])
+def get_anal_res(request):
+    if request.method == "GET":
+        data = request.GET
+        mon = data["month"]
+        if mon < 6:
+            qs = ShiftName.objects.filter(agent__id=data["ag_id"]).filter(year=data["year"]).filter(month__range=(0,5))
+            return Response(ShiftInvSer(qs, many=True).data, status=200)
+        return Response(ShiftInvSer(ShiftName.objects.filter(agent__id=data["ag_id"]).filter(year=data["year"]).filter(month__range=(6,11)), many=True).data, status=200)
 
 @api_view(["POST"])
 def WriteTimesheet(request, *args, **kwargs):
