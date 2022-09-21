@@ -164,10 +164,10 @@ def get_anal_res(request):
         data = request.GET
         mon = int(data["month"])
         print(mon)
-        if mon < 6:
-            qs = ShiftName.objects.filter(agent__id=data["ag_id"]).filter(year=data["year"]).filter(month__range=(0,5))
+        if mon <= 6:
+            qs = ShiftName.objects.filter(agent__id=data["ag_id"]).filter(year=data["year"]).filter(month__range=(1,6))
             return Response(ShiftInvSer(qs, many=True).data, status=200)
-        return Response(ShiftInvSer(ShiftName.objects.filter(agent__id=data["ag_id"]).filter(year=data["year"]).filter(month__range=(6,11)), many=True).data, status=200)
+        return Response(ShiftInvSer(ShiftName.objects.filter(agent__id=data["ag_id"]).filter(year=data["year"]).filter(month__range=(7,12)), many=True).data, status=200)
 
 @api_view(["POST"])
 def WriteTimesheet(request, *args, **kwargs):
