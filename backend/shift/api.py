@@ -142,6 +142,17 @@ def CancelRequest(request, *args, **kwargs):
         else:
             return Response(NotificationSerializer(noti[0], context={"employee_id":employee_id, "shift_ass_id":shift_ass_id}).data, status=200)
 
+
+# @api_view(["GET"])
+# def get_in_data(request, *args, **kwargs):
+#     if request.method == "GET":
+#         data = request.GET
+#         mon = data["month"]
+#         day = data["day"]
+#         year = data["year"]
+#         # qs = ShiftName.objects.filter(year=year).filter(month__range=())
+
+
 @api_view(["POST"])
 def WriteTimesheet(request, *args, **kwargs):
   if request.method == "POST":
