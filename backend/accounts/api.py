@@ -38,7 +38,7 @@ class RegisterAPI(generics.GenericAPIView):
           profile.name = data['home_name']
           profile.address = data["address"]
           profile.agent.add(agent)
-          
+          profile.key = key
           profile.save()
         else:
           return Response({"message":"Agent not found"}, status=404)

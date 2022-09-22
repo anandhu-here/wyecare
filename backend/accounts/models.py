@@ -162,6 +162,7 @@ class HomeProfile(models.Model):
     postcode = models.CharField(max_length=100, null=True, blank=True)
     name = models.CharField(max_length=100, null=True, blank=True)
     agent = models.ManyToManyField(AgentProfile)
+    key = models.CharField(max_length=100, blank=True, null=True)
     def __str__(self):
         if self.name:
             return self.name 
