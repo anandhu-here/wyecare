@@ -155,7 +155,7 @@ def get_in_data(request, *args, **kwargs):
         home_id = data["home_id"]
         agent_id = data["agent_id"]
         tqs = Timesheets.objects.filter(shiftname__agent__id=agent_id ).filter(home__id=home_id).filter(shiftname__year=year).filter(shiftname__month__range=(mon1, mon2)).filter(shiftname__day__range=(day1, day2))
-        
+        print(tqs, "anandhuhuhu")
         return Response(TimesheetInvSerializer(tqs, many=True).data, status = 200)
 
 @api_view(["GET"])
