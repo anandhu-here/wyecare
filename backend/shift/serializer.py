@@ -43,6 +43,13 @@ class ShiftSerializer(serializers.ModelSerializer):
         data = ShiftAssSerializer(ShiftAssignment.objects.filter(shiftname = instance), many=True, context={"shift_id":instance.id}).data
         return data
 
+
+class TimesheetInvSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Timesheets
+        fields = "__all__"
+
+        
 class TimesheetSerializer(serializers.ModelSerializer):
     profile = serializers.SerializerMethodField(read_only=True)
     shiftname = serializers.SerializerMethodField(read_only=True)

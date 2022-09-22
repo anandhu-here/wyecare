@@ -4,7 +4,7 @@ from accounts.models import AgentProfile, Profile, User
 from .models import  Notifications, ShiftAssignment, ShiftName, Timesheets
 from accounts.models import HomeProfile
 import requests as rq
-from .serializer import NotificationSerializer, ShiftAssignSerializer, ShiftAssignmentSerializer, ShiftInvSer, ShiftSerializer, ShiftAssignedSerializer, TimesheetSerializer
+from .serializer import NotificationSerializer, ShiftAssignSerializer, ShiftAssignmentSerializer, ShiftInvSer, ShiftSerializer, ShiftAssignedSerializer, TimesheetInvSerializer, TimesheetSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.parsers import MultiPartParser, FormParser
 import base64
@@ -154,9 +154,9 @@ def get_in_data(request, *args, **kwargs):
         year = data["year"]
         home_id = data["home_id"]
         agent_id = data["agent_id"]
-        qs = ShiftName.objects.filter(agent__id=agent_id).filter(home__id=home_id).filter(year=year).filter(month__range=(mon1, mon2)).filter(day__range=(day1, day2))
+        tqs = Timesheets.objects.filter(shiftname__agent__id=agent_id ).filter(home__id=home_id).filter(shiftname__year=year).filter(shiftname__month__range=(mon1, mon2)).filter(shiftname__day__range=(day1, day2))
         
-        return Response(ShiftInvSer(qs, many=True).data, status = 200)
+        return Response(TimesheetInvSerializer(tqs, many=True).data, status = 200)
 
 @api_view(["GET"])
 def get_anal_res(request):
