@@ -8,15 +8,21 @@ from datetime import datetime
 
 class AgentProfileSerializer(serializers.ModelSerializer):
   push_token = serializers.SerializerMethodField()
+  homes = serializers.SerializerMethodField()
+  staffs = serializers.SerializerMethodField()
   class Meta:
     model = AgentProfile
-    fields = ('id','agent', 'phone', 'key', 'name', 'postcode', 'address', 'push_token')
+    fields = ('id','agent', 'phone', 'key', 'name', 'postcode', 'address', 'push_token', 'homes', "staffs")
 
   def get_push_token(self, obj):
     if obj.agent.push_token:
       return obj.agent.push_token
     else:
       return False
+  def get_staffs(self, obj):
+    return Profile.objects.filter(key=obj.key).count()
+  def get_homes(self, obj):
+    return HomeProfile.objects.filter(key=obj.key).count()
 class HomeProfileSerializer(serializers.ModelSerializer):
   agent = AgentProfileSerializer(read_only=True, many=True)
   class Meta:
