@@ -87,7 +87,7 @@ class LoginAPI(generics.GenericAPIView):
     password = request.data["password"]
     push_token = request.data["push_token"]
     serializer = self.get_serializer(data={"email":email, "password":password})  
-    print(serializer.errors, "anandhuh eres")  
+    
     if serializer.is_valid(raise_exception=True):
       user = serializer.validated_data
       _, token = AuthToken.objects.create(user)
