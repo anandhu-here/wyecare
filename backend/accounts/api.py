@@ -100,7 +100,7 @@ class LoginAPI(generics.GenericAPIView):
       })
     else:
       print(serializer.errors, "erroooro")
-      return Response({})
+      return Response({serializer.errors}, status=400)
     
 
 # Get User API
