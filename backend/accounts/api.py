@@ -96,11 +96,11 @@ class LoginAPI(generics.GenericAPIView):
       return Response({
         "user": UserSerializer(user, context=self.get_serializer_context()).data,
         "token": token,
-        "message":"authorized"
+        "status":200
       })
     else:
       print(serializer.errors, "erroooro")
-      return Response(data=serializer.errors, status=404)
+      return Response({"data":serializer.errors, "status":404}, status=200)
     
 
 # Get User API
