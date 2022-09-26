@@ -88,17 +88,20 @@ class LoginAPI(generics.GenericAPIView):
     push_token = request.data["push_token"]
     serializer = self.get_serializer(data={"email":email, "password":password})  
     print(serializer.errors, "anandhuh eres")  
-    serializer.is_valid(raise_exception=True)
+    if serializer.is_valid(raise_exception=True):
+      user = serializer.validated_data
+      _, token = AuthToken.objects.create(user)
+      user.push_token = push_token
+      user.save()
+      return Response({
+        "user": UserSerializer(user, context=self.get_serializer_context()).data,
+        "token": token,
+        "message":"authorized"
+      })
+    else:
+      print(serializer.errors, "erroooro")
+      return Response({})
     
-    user = serializer.validated_data
-    _, token = AuthToken.objects.create(user)
-    user.push_token = push_token
-    user.save()
-    return Response({
-      "user": UserSerializer(user, context=self.get_serializer_context()).data,
-      "token": token,
-      "message":"authorized"
-    })
 
 # Get User API
 @api_view(["GET"])
